@@ -25,6 +25,7 @@ jobs:
       run: |
         gcloud services enable deploymentmanager.googleapis.com --project ${{ secrets.GCP_PROJECT_ID }}
         gcloud services enable secretmanager.googleapis.com --project ${{ secrets.GCP_PROJECT_ID }}
+        gcloud services enable compute.googleapis.com --project ${{ secrets.GCP_PROJECT_ID }}
 
     - name: 'Deploy to Cloud Deployment Manager'
       run: |
