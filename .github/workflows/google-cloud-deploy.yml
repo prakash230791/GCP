@@ -29,6 +29,5 @@ jobs:
 
     - name: 'Deploy to Cloud Deployment Manager'
       run: |
-        gcloud deployment-manager deployments create my-first-vm \
-          --config vm_template.yaml \
-          --project ${{ secrets.GCP_PROJECT_ID }}
+        gcloud deployment-manager deployments update my-first-vm --config vm_template.yaml --project ${{ secrets.GCP_PROJECT_ID }} || \
+        gcloud deployment-manager deployments create my-first-vm --config vm_template.yaml --project ${{ secrets.GCP_PROJECT_ID }}
