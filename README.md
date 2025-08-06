@@ -35,7 +35,7 @@ This repository is configured with a GitHub Actions workflow to automatically de
 To make this work, you need to configure the following secrets in your GitHub repository settings:
 
 *   `GCP_PROJECT_ID`: Your Google Cloud project ID.
-*   `GCP_SA_KEY`: A JSON key for a Google Cloud service account with the `Deployment Manager Editor`, `Compute Admin`, and `Secret Manager Admin` roles.
+*   `GCP_SA_KEY`: A JSON key for a Google Cloud service account with the `Deployment Manager Editor`, `Compute Admin`, `Secret Manager Admin`, and `Service Usage Admin` roles.
 
 Once the secrets are configured, any push to the `main` branch will trigger the deployment.
 
