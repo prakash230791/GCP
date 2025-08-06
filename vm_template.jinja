@@ -1,0 +1,49 @@
+resources:
+- name: my-first-vm
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-a
+    machineType: zones/us-central1-a/machineTypes/n1-standard-1
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: projects/debian-cloud/global/images/family/debian-11
+    networkInterfaces:
+    - network: global/networks/default
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          echo "Startup script started at $(date)"
+          # Create a user and generate a password
+          USERNAME="gemini-user"
+          PASSWORD=$(openssl rand -base64 12)
+          useradd -m -s /bin/bash $USERNAME
+          echo "$USERNAME:$PASSWORD" | chpasswd
+
+          # The Secret Manager API should be enabled by the workflow, but enabling here as a fallback.
+          gcloud services enable secretmanager.googleapis.com --project=$(gcloud config get-value project)
+
+          # --- Store Username ---
+          # Check if the secret exists, and create it if it doesn't.
+          gcloud secrets describe vm-username --project=$(gcloud config get-value project) >/dev/null 2>&1 || \
+            gcloud secrets create vm-username --replication-policy=automatic --project=$(gcloud config get-value project)
+          # Add the username as a new version to the secret.
+          echo -n "$USERNAME" | gcloud secrets versions add vm-username --data-file=- --project=$(gcloud config get-value project)
+
+          # --- Store Password ---
+          # Check if the secret exists, and create it if it doesn't.
+          gcloud secrets describe vm-password --project=$(gcloud config get-value project) >/dev/null 2>&1 || \
+            gcloud secrets create vm-password --replication-policy=automatic --project=$(gcloud config get-value project)
+          # Add the password as a new version to the secret.
+          echo -n "$PASSWORD" | gcloud secrets versions add vm-password --data-file=- --project=$(gcloud config get-value project)
+      - key: timestamp
+        value: "{{ properties.timestamp }}"
+    serviceAccounts:
+    - email: default
+      scopes:
+      - https://www.googleapis.com/auth/cloud-platform
