@@ -37,6 +37,8 @@ To make this work, you need to configure the following secrets in your GitHub re
 *   `GCP_PROJECT_ID`: Your Google Cloud project ID.
 *   `GCP_SA_KEY`: A JSON key for a Google Cloud service account with the `Deployment Manager Editor`, `Compute Admin`, `Secret Manager Admin`, and `Service Usage Admin` roles.
 
+**Important:** You must also grant the `Secret Manager Admin` role to the **Compute Engine default service account**. You can find this service account in the IAM section of your Google Cloud project. Its name will look like `[PROJECT_NUMBER]-compute@developer.gserviceaccount.com`.
+
 Once the secrets are configured, any push to the `main` branch will trigger the deployment.
 
 ## Connecting to the VM
