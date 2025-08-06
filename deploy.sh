@@ -1,4 +1,4 @@
-PROJECT_ID="[YOUR_PROJECT_ID]"
+PROJECT_ID="lab03-467223"
 
 gcloud config set project $PROJECT_ID
 

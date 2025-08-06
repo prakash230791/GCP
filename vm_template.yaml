@@ -13,3 +13,26 @@ resources:
         sourceImage: projects/debian-cloud/global/images/family/debian-11
     networkInterfaces:
     - network: global/networks/default
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          # Create a user and generate a password
+          USERNAME="gemini-user"
+          PASSWORD=$(openssl rand -base64 12)
+          useradd -m -s /bin/bash $USERNAME
+          echo "$USERNAME:$PASSWORD" | chpasswd
+
+          # Enable the Secret Manager API
+          gcloud services enable secretmanager.googleapis.com
+
+          # Store the username in Secret Manager
+          echo -n $USERNAME | gcloud secrets create vm-username --data-file=- --replication-policy=automatic --project=$(gcloud config get-value project)
+
+          # Store the password in Secret Manager
+          echo -n $PASSWORD | gcloud secrets create vm-password --data-file=- --replication-policy=automatic --project=$(gcloud config get-value project)
+    serviceAccounts:
+    - email: default
+      scopes:
+      - https://www.googleapis.com/auth/cloud-platform

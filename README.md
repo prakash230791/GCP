@@ -35,9 +35,21 @@ This repository is configured with a GitHub Actions workflow to automatically de
 To make this work, you need to configure the following secrets in your GitHub repository settings:
 
 *   `GCP_PROJECT_ID`: Your Google Cloud project ID.
-*   `GCP_SA_KEY`: A JSON key for a Google Cloud service account with the `Deployment Manager Editor` and `Compute Admin` roles.
+*   `GCP_SA_KEY`: A JSON key for a Google Cloud service account with the `Deployment Manager Editor`, `Compute Admin`, and `Secret Manager Admin` roles.
 
 Once the secrets are configured, any push to the `main` branch will trigger the deployment.
+
+## Accessing the VM
+
+After the deployment is complete, you can retrieve the generated username and password from Secret Manager using the following commands:
+
+```bash
+# Retrieve the username
+gcloud secrets versions access latest --secret="vm-username"
+
+# Retrieve the password
+gcloud secrets versions access latest --secret="vm-password"
+```
 
 ## Verify
 
