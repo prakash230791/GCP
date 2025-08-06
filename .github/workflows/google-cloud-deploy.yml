@@ -1,0 +1,13 @@
+name: Deploy to Google Cloud
+
+on:  push:    branches:      - main
+
+jobs:  deploy:    runs-on: ubuntu-latest
+
+    steps:    - name: Checkout code      uses: actions/checkout@v3
+
+    - name: 'Authenticate to Google Cloud'      uses: 'google-github-actions/auth@v1'      with:        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+    - name: 'Set up Cloud SDK'      uses: 'google-github-actions/setup-gcloud@v1'
+
+    - name: 'Deploy to Cloud Deployment Manager'      run: |        gcloud deployment-manager deployments create my-first-vm \          --template vm_template.yaml \          --project ${{ secrets.GCP_PROJECT_ID }}
