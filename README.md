@@ -39,16 +39,41 @@ To make this work, you need to configure the following secrets in your GitHub re
 
 Once the secrets are configured, any push to the `main` branch will trigger the deployment.
 
-## Accessing the VM
+## Connecting to the VM
 
-After the deployment is complete, you can retrieve the generated username and password from Secret Manager using the following commands:
+To connect to your new virtual machine, you will need the username, password, and the VM's external IP address.
+
+### 1. Retrieve Credentials
+
+The username and a randomly generated password were stored in Google Secret Manager during deployment. Use these commands to retrieve them:
 
 ```bash
 # Retrieve the username
-gcloud secrets versions access latest --secret="vm-username"
+VM_USERNAME=$(gcloud secrets versions access latest --secret="vm-username")
 
 # Retrieve the password
-gcloud secrets versions access latest --secret="vm-password"
+VM_PASSWORD=$(gcloud secrets versions access latest --secret="vm-password")
+
+echo "Username: $VM_USERNAME"
+echo "Password: $VM_PASSWORD"
+```
+
+### 2. Get the External IP Address
+
+Find the external IP address of your VM using the following command:
+
+```bash
+EXTERNAL_IP=$(gcloud compute instances describe my-first-vm --zone=us-central1-a --format='get(networkInterfaces[0].accessConfigs[0].natIP)')
+
+echo "External IP: $EXTERNAL_IP"
+```
+
+### 3. Connect using SSH
+
+Now you can use any standard SSH client to connect to the machine. You will be prompted for the password you retrieved in the first step.
+
+```bash
+ssh ${VM_USERNAME}@${EXTERNAL_IP}
 ```
 
 ## Verify
