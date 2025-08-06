@@ -1,23 +1,9 @@
-resources:
-- name: my-first-vm
-  type: compute.v1.instance
-  properties:
-    zone: us-central1-a
-    machineType: zones/us-central1-a/machineTypes/n1-standard-1
-    disks:
-    - deviceName: boot
-      type: PERSISTENT
-      boot: true
-      autoDelete: true
-      initializeParams:
-        sourceImage: projects/debian-cloud/global/images/family/debian-11
-    networkInterfaces:
-    - network: global/networks/default
     metadata:
       items:
       - key: startup-script
         value: |
           #!/bin/bash
+          echo "Startup script started at $(date)"
           # Create a user and generate a password
           USERNAME="gemini-user"
           PASSWORD=$(openssl rand -base64 12)
@@ -40,7 +26,5 @@ resources:
             gcloud secrets create vm-password --replication-policy=automatic --project=$(gcloud config get-value project)
           # Add the password as a new version to the secret.
           echo -n "$PASSWORD" | gcloud secrets versions add vm-password --data-file=- --project=$(gcloud config get-value project)
-    serviceAccounts:
-    - email: default
-      scopes:
-      - https://www.googleapis.com/auth/cloud-platform
+      - key: timestamp
+        value: "${properties.timestamp}"

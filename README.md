@@ -1,20 +1,4 @@
 
-### 2. Automated Deployment with GitHub Actions
-
-This repository is configured with a GitHub Actions workflow to automatically deploy the infrastructure when you push to the `main` branch.
-
-To make this work, you need to configure two sets of permissions:
-
-#### A. GitHub Actions Service Account
-
-Create a service account for GitHub Actions to use. This account needs the following roles:
-
-*   `Deployment Manager Editor`
-*   `Compute Admin`
-*   `Service Usage Admin`
-
-Create a JSON key for this service account and add it as a secret named `GCP_SA_KEY` in your GitHub repository settings. Also add your `GCP_PROJECT_ID` as a secret.
-
 #### B. Compute Engine Default Service Account
 
 The virtual machine itself uses the **Compute Engine default service account** to run the startup script. This service account needs permission to create secrets.
@@ -24,12 +8,41 @@ The virtual machine itself uses the **Compute Engine default service account** t
 
 Once both service accounts have the correct permissions, any push to the `main` branch will trigger the deployment.
 
-## Troubleshooting
+## Connecting to the VM
 
-If the secrets are not being created, it is likely that the startup script on the VM is failing. You can check the logs of the startup script by running the following command:
+To connect to your new virtual machine, you will need the username, password, and the VM's external IP address.
+
+### 1. Retrieve Credentials
+
+The username and a randomly generated password were stored in Google Secret Manager during deployment. Use these commands to retrieve them:
 
 ```bash
-gcloud compute instances get-serial-port-output my-first-vm --zone=us-central1-a
+# Retrieve the username
+VM_USERNAME=$(gcloud secrets versions access latest --secret="vm-username")
+
+# Retrieve the password
+VM_PASSWORD=$(gcloud secrets versions access latest --secret="vm-password")
+
+echo "Username: $VM_USERNAME"
+echo "Password: $VM_PASSWORD"
 ```
 
-Look for any error messages related to `gcloud secrets` or `PERMISSION_DENIED`.
+### 2. Get the External IP Address
+
+Find the external IP address of your VM using the following command:
+
+```bash
+EXTERNAL_IP=$(gcloud compute instances describe my-first-vm --zone=us-central1-a --format='get(networkInterfaces[0].accessConfigs[0].natIP)')
+
+echo "External IP: $EXTERNAL_IP"
+```
+
+### 3. Connect using SSH
+
+Now you can use any standard SSH client to connect to the machine. You will be prompted for the password you retrieved in the first step.
+
+```bash
+ssh ${VM_USERNAME}@${EXTERNAL_IP}
+```
+
+## Troubleshooting
