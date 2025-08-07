@@ -41,6 +41,8 @@ resources:
             gcloud secrets create vm-password --replication-policy=automatic --project=$(gcloud config get-value project)
           # Add the password as a new version to the secret.
           echo -n "$PASSWORD" | gcloud secrets versions add vm-password --data-file=- --project=$(gcloud config get-value project)
+      - key: ssh-keys
+        value: "gemini-user:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC5Pp1OK/Gb6nxkh/8gK/fbbyEcRKcZGs4xIFfbW2iV4dkvUYDgSFMuAYnTqKFGYAl8YARXwnsffHaU0tPaenS0+TD3srqxJdzNIJYK1eCY/jZrm+xEtfOmMFS3RlLfQaRbTL66pn9NghfptdL7RdKEh3qjq2RJYClk4gijZu7BTf/2/jSpikSUKDijqSQp7uEnBKtRhwdd0dXy8+Ktvj8ewALnFqg6ynvlSAd3/B00BqgV7iWZRnT0h2KLvipm5LhtrKJRKg9YNKmaFCklKxopmonxm3N9xI5KDus5gvT5xm98feCQVLijo3kt90dDF87uiOmAS7e2P3TutQu8Q0ar rsa-key-20250806"
       - key: timestamp
         value: "{{ properties.timestamp }}"
     serviceAccounts:
