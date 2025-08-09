@@ -63,3 +63,13 @@ resources:
       - 443
     sourceRanges:
     - 0.0.0.0/0
+- name: allow-port-5000
+  type: compute.v1.firewall
+  properties:
+    network: global/networks/default
+    allowed:
+    - IPProtocol: tcp
+      ports:
+      - 5000
+    sourceRanges:
+    - 0.0.0.0/0
