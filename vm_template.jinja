@@ -1,5 +1,5 @@
 resources:
-- name: gcp-vm04
+- name: gcp-vm05
   type: compute.v1.instance
   properties:
     zone: us-east1-b
@@ -45,7 +45,7 @@ resources:
           # Add the password as a new version to the secret.
           echo -n "$PASSWORD" | gcloud secrets versions add vm-password --data-file=- --project=$(gcloud config get-value project)
       - key: ssh-keys
-        value: "rsa-key-20250809:sh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCfHWmqRRdtTy+Jk3tvVUayzdkZt+rLc7jlGaOZUMGmr/M30jO00ci7/Jt2IqCuBFC5UwdcSdC4me8rlSsQTI35gudfWLov8Qw6nmFHuHO1V0+nFUPdlF+a6ohgIV3B4k8m7nXSOgH1BcNcBY/Ukd23w/ZekiJdebrn4OYE7CCN07dRzX2f9e10EP59Vyo2CHXn0M0WQnpHsRSmqi/5PekYULLWYEBQOHRc2t/zsaCzp//WUSF02NUTe6RVUktZUrop763g/XDPxvVsR079c6CcYh4ruFZqB/zEYImS8hZQ180EEOurYtADi6nELHUl/XpYNYnCZpn2FKbvl/A7HEwt"
+        value: "gemini-user:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCgqssPggUk6JP5KGpLUIAC/+l1lZrT2kyAq1jfOlyCg2RDaQFWD1ah/APIFPC5MM2QSLHFjr+ccNc3X+zQTyCb9RBlZtwvZURnZ3h7/S5VzEECi199FRiNFktaaO2IRsJ38y0nXuEaDZy6wcXQnIKOzze+5p2S0pyH1eejPM1NgEDk3SbNUjS2I/4FxQYVtXHxv/hFHBYsY5YVsgcG4H1BOlQ+8BvKDbpU7zi+DZLsydUXS0hGxOHmVlMBJFnw0BoBdi+2WgS6fhPpzHTZ4pchY/nRtVzS/hwVaSjGJxSOAqNbBhHXq59eBqkH9+aXIFPGEudim827CcrfPW4DmATn/4csZLZsng+3Hnb3Cf25RGCCqMFmjGdZy/bGA+RwlN1SHTTk23WMKQCz/M9rKq2yoM0CP6HemxTKWTXSD5vAxatZV+6r3FIH04luO9Rl6q6flyd3N6Yog9ENZZN1r4auEeL8LTHqDrfzVbpYxZrYcSHx0ZC956MAYn2Kx86SVGc= praka@PrakashDellPC"
       - key: timestamp
         value: "{{ properties.timestamp }}"
     serviceAccounts:
