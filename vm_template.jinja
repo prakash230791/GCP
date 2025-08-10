@@ -45,7 +45,7 @@ resources:
           # Add the password as a new version to the secret.
           echo -n "$PASSWORD" | gcloud secrets versions add vm-password --data-file=- --project=$(gcloud config get-value project)
       - key: ssh-keys
-        value: "gemini-user:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDO5qW6GQ9V4JyFbkztC7rfJXNoBS6HPB18WyscK5Cqu4pmakpRx1BgLcvR0bHzX/ExfhSa/FZNKXVs2I+bPgfAi/s9CAX9YHPMxniMc79GNjtpTO/h4vszd+sZkLiUOuopt/HZ+UyKfg/pBgmexDUjYrxiExKj0rxtXMB4C77JdmtrmQbexk+Z3om2qOSGmqR+hykonw/hSoGvRhI+rKW41dJsKDI4dPqwxnWAQM4qQiP45Iy2gQ/lPF5vbSSh3L33tR7HR2mrmnoDltE90i9Nq1ab9TTpw0FgFU8g0UtRu8xSGcX++nqrqaAgjzMPZZeK/NzaU3Vj4OujSgpt7WP1A0t/k72DXfLZQUSleTC/+yuP9rw5T22ANxsD1Nw4BMZ0bDQxvUcQv2RNDmL6vPjJdNMhb96srogzogrXe6ybWfR/cQ8XRg+WG4D2WqnCEeORpCH1WDYZxq7wGMWSWr0dAw6m1D2UCW1SdWcQhMeX3E4bDMUV16FVYTCilyjo+0= praka@PrakashDellPC"
+        value: "gemini-user:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDVkz8Ql52amO1UP18iPVz9S4yfmFTOuamSlyA6cJSUJqEXb2whjUi38RsRiVcZrOH/wLXyIpTCRFPX873laRacSsRB9awVYOOEb0vGT/VtHru3QnzwUukwe60w7g+BvbpwpYl7VqjeUl9sPUpPc/no/o5e22id1mtrS9aTrij5cSGVMXBRQvkNKTBU2U9GYpYt7h7raPAAKt34DzTGyt8hGozpa7JgVt9RCeQA51FlX6pePMHGDyw6azrqMNTahMMwjR6WQj3hbgYKbvWFg1d+Zd9u1Chw7TCErkRPkK5oef+PH83eD9lvQzuo58kwlzPL8AMmUJWBl7FC17v2zkRqrpFx3iD29qx+TyCxowYW0unqt5rfewU5ojobD6z2vFPaA++24XFtee2ftzZzAjvusyWXMH+m6/dbMqa/YtZY56b9kPBcDYZ82837mrqBkkehDTmap8mVimc3uGEE2lb+vjilUN3wydEwTEPxl4KKA2A1q2I5mTG1njPLpIBW+8M= praka@PrakashDellPC"
       - key: timestamp
         value: "{{ properties.timestamp }}"
     serviceAccounts:
