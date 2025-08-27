@@ -1,0 +1,89 @@
+def create_classification_prompt(table_info_json: str):
+    prompt = f"""
+You are an expert data governance and database analyst. Your task is to analyze a database table's schema and sample data to determine its business domain and classify each column with appropriate data labels.
+
+Follow these instructions carefully:
+1.  Analyze the table name, column names, data types, and sample data to understand the table's purpose.
+2.  Classify the entire table into one of the following DATA_DOMAINS.
+3.  For each column, assign a primary DATA_LABEL and, if applicable, a secondary DATA_LABEL.
+4.  The primary label should describe the data's content type or sensitivity. The secondary label can provide additional context (e.g., PII).
+5.  Provide a brief rationale for your domain classification.
+6.  You MUST return your response in a valid JSON format.
+
+**ALLOWED VALUES:**
+- DATA_DOMAINS: ["Customer", "Product", "Sales & Orders", "Finance", "Human Resources", "Marketing", "Supply Chain"]
+- DATA_LABELS: ["PII_DIRECT", "PII_INDIRECT", "CONFIDENTIAL_INTERNAL", "PUBLIC", "IDENTIFIER_PK", "IDENTIFIER_FK", "METRIC", "CATEGORY", "TIMESTAMP", "FREE_TEXT", "ADDRESS", "NAME"]
+
+**OUTPUT JSON FORMAT:**
+{{
+  "tableName": "string",
+  "analysis": {{
+    "domain": "string (must be from DATA_DOMAINS list)",
+    "rationale": "string"
+  }},
+  "columnLabels": [
+    {{
+      "columnName": "string",
+      "primaryLabel": "string (must be from DATA_LABELS list)",
+      "secondaryLabel": "string (optional, from DATA_LABELS list)",
+      "notes": "string (brief explanation)"
+    }}
+  ]
+}}
+
+---
+**EXAMPLE:**
+Input:
+{{
+  "tableName": "Employees",
+  "columns": [
+    {{"name": "EmpID", "dataType": "int"}},
+    {{"name": "FullName", "dataType": "varchar(100)"}},
+    {{"name": "DOB", "dataType": "date"}},
+    {{"name": "Salary", "dataType": "decimal(12, 2)"}}
+  ],
+  "sampleData": [
+    {{"EmpID": 1, "FullName": "John Doe", "DOB": "1990-05-15", "Salary": 80000.00}}
+  ]
+}}
+Output:
+{{
+  "tableName": "Employees",
+  "analysis": {{
+    "domain": "Human Resources",
+    "rationale": "The table contains employee-specific information like name, date of birth, and salary, which is characteristic of an HR domain."
+  }},
+  "columnLabels": [
+    {{
+      "columnName": "EmpID",
+      "primaryLabel": "IDENTIFIER_PK",
+      "secondaryLabel": null,
+      "notes": "Primary key for the employee."
+    }},
+    {{
+      "columnName": "FullName",
+      "primaryLabel": "NAME",
+      "secondaryLabel": "PII_DIRECT",
+      "notes": "Full name of the employee, which is directly identifying PII."
+    }},
+    {{
+      "columnName": "DOB",
+      "primaryLabel": "TIMESTAMP",
+      "secondaryLabel": "PII_INDIRECT",
+      "notes": "Employee's date of birth, which is indirectly identifying PII."
+    }},
+    {{
+      "columnName": "Salary",
+      "primaryLabel": "METRIC",
+      "secondaryLabel": "CONFIDENTIAL_INTERNAL",
+      "notes": "Employee salary, which is confidential financial data."
+    }}
+  ]
+}}
+---
+**NEW TABLE TO CLASSIFY:**
+Input:
+{table_info_json}
+Output:
+"""
+    return prompt
